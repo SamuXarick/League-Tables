@@ -213,8 +213,8 @@ function LeagueTable::GetText(text, last_param = null)
 	local ret = GSText(text.str);
 	foreach (param in text.p) {
 		if (typeof(param) == "table") {
-			ret.AddParam(GetText(param))
-		} else {;
+			ret.AddParam(GetText(param));
+		} else {
 			ret.AddParam(param);
 		}
 	}
