@@ -4,10 +4,10 @@ function LeagueTable::GetCanalInfrastructureEfficiency_Val(company)
 	local score = SetText(GetCanalInfrastructureEfficiency_ScoreString(), [ 0, 0, 0, 0 ]);
 	local element = SetText(GSText.STR_CANAL_INFRASTRUCTURE_EFFICIENCY_NONE, []);
 	local link = [ GSLeagueTable.LINK_COMPANY, company ];
-	
+
 	if (GSCompany.ResolveCompanyID(company) != GSCompany.COMPANY_INVALID) {
 		local company_scope = GSCompanyMode(company);
-		
+
 		local infrastructure_count = GSInfrastructure.GetInfrastructurePieceCount(company, GSInfrastructure.INFRASTRUCTURE_CANAL);
 
 		local vehicle_list = GSVehicleList();
@@ -35,7 +35,7 @@ function LeagueTable::GetCanalInfrastructureEfficiency_Val(company)
 			station_vehicle_list.KeepValue(GSVehicle.VT_WATER);
 			if (station_vehicle_list.Count() > 0) {
 				visited_sts++;
-				foreach(vehicle, _ in station_vehicle_list) {
+				foreach (vehicle, _ in station_vehicle_list) {
 					local order_count = GSOrder.GetOrderCount(vehicle);
 					for (local order = 0; order < order_count; order++) {
 						if (GSOrder.IsGotoStationOrder(vehicle, order)) {
@@ -53,7 +53,7 @@ function LeagueTable::GetCanalInfrastructureEfficiency_Val(company)
 			}
 		}
 		local pct = num_sts > 0 ? (visited_sts * 100 / num_sts) : 0;
-		
+
 		local cargo_list = GSCargoList();
 		local best_rated_station = -1;
 		local highest_cargo_rating = 0;
@@ -68,18 +68,18 @@ function LeagueTable::GetCanalInfrastructureEfficiency_Val(company)
 				}
 			}
 		}
-		
+
 		rating = efficiency;
 		score.p = [ visited_sts, num_sts, pct, efficiency ];
 		if (GSStation.IsValidStation(best_rated_station)) {
 			local station_tile = loading_station_list.GetValue(best_rated_station);
-			
+
 			element.str = GetCanalInfrastructureEfficiency_ElementString();
 			element.p = [ best_rated_station, highest_cargo_rating ];
 			link = [ GSLeagueTable.LINK_TILE, station_tile ];
 		}
 	}
-	
+
 	return [ rating, score, element, link ];
 }
 

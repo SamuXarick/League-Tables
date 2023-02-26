@@ -4,10 +4,10 @@ function LeagueTable::GetAirportInfrastructureEfficiency_Val(company)
 	local score = SetText(GetAirportInfrastructureEfficiency_ScoreString(), [ 0, 0, 0, 0 ]);
 	local element = SetText(GSText.STR_AIRPORT_INFRASTRUCTURE_EFFICIENCY_NONE, []);
 	local link = [ GSLeagueTable.LINK_COMPANY, company ];
-	
+
 	if (GSCompany.ResolveCompanyID(company) != GSCompany.COMPANY_INVALID) {
 		local company_scope = GSCompanyMode(company);
-		
+
 		local infrastructure_count = 0;
 		local station_list = GSStationList(GSStation.STATION_AIRPORT);
 		local num_sts = station_list.Count();
@@ -21,7 +21,7 @@ function LeagueTable::GetAirportInfrastructureEfficiency_Val(company)
 			station_vehicle_list.KeepValue(GSVehicle.VT_AIR);
 			if (station_vehicle_list.Count() > 0) {
 				visited_sts++;
-				foreach(vehicle, _ in station_vehicle_list) {
+				foreach (vehicle, _ in station_vehicle_list) {
 					local order_count = GSOrder.GetOrderCount(vehicle);
 					for (local order = 0; order < order_count; order++) {
 						if (GSOrder.IsGotoStationOrder(vehicle, order)) {
@@ -39,7 +39,7 @@ function LeagueTable::GetAirportInfrastructureEfficiency_Val(company)
 			}
 		}
 		local pct = num_sts > 0 ? (visited_sts * 100 / num_sts) : 0;
-		
+
 		local vehicle_list = GSVehicleList();
 		vehicle_list.Valuate(GSVehicle.GetVehicleType);
 		vehicle_list.KeepValue(GSVehicle.VT_AIR);
@@ -54,7 +54,7 @@ function LeagueTable::GetAirportInfrastructureEfficiency_Val(company)
 		local current_year = GSDate.GetYear(current_date);
 		local days_since_last_year = 365 + current_date - GSDate.GetDate(current_year, 1, 1);
 		local efficiency = infrastructure_count > 0 ? (profits - maintenance_cost * days_since_last_year / 30 ) / infrastructure_count : 0;
-		
+
 		local cargo_list = GSCargoList();
 		local best_rated_station = -1;
 		local highest_cargo_rating = 0;
@@ -69,18 +69,18 @@ function LeagueTable::GetAirportInfrastructureEfficiency_Val(company)
 				}
 			}
 		}
-		
+
 		rating = efficiency;
 		score.p = [ visited_sts, num_sts, pct, efficiency ];
 		if (GSStation.IsValidStation(best_rated_station)) {
 			local station_tile = loading_station_list.GetValue(best_rated_station);
-			
+
 			element.str = GetAirportInfrastructureEfficiency_ElementString();
 			element.p = [ best_rated_station, highest_cargo_rating ];
 			link = [ GSLeagueTable.LINK_TILE, station_tile ];
 		}
 	}
-	
+
 	return [ rating, score, element, link ];
 }
 

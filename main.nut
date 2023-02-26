@@ -12,7 +12,7 @@ class LeagueTable extends GSController
 		"most_profitable_ship",
 		"most_profitable_aircraft",
 	];
-	
+
 	tables = [];
 
 	constructor() {
@@ -104,11 +104,12 @@ function LeagueTable::Start()
 			if (!force_update && !GSGame.IsMultiplayer() && !GSWindow.IsOpen(GSWindow.WC_COMPANY_LEAGUE, window_number)) continue;
 			local old_val = clone league.val;
 			local old_pct = clone league.pct;
-			foreach (c_id, c_val in league.val) {
-				league.val.rawset(c_id, GetLeagueVal(league.name, c_id));
-				GSAdmin.Send({ league_name = league.name, company = c_id, league_val = GetLeagueVal(league.name, c_id) });
+			foreach (c_id, _ in league.val) {
+				local c_val = GetLeagueVal(league.name, c_id);
+				league.val.rawset(c_id, c_val);
+				GSAdmin.Send({ league_name = league.name, company = c_id, company_val = c_val });
 			}
-			
+
 			local best_value = 0x8000000000000000;
 			local worst_value = 0x7FFFFFFFFFFFFFFF;
 			foreach (c_id, c_val in league.val) {
@@ -154,7 +155,7 @@ function LeagueTable::LinkType(val)
 	assert(typeof(val[3]) == "array");
 	assert(val[3].len() == 2);
 	assert(typeof(val[3][0]) == "integer");
-	
+
 	return val[3][0];
 }
 
@@ -165,7 +166,7 @@ function LeagueTable::LinkTarget(val)
 	assert(typeof(val[3]) == "array");
 	assert(val[3].len() == 2);
 	assert(typeof(val[3][1]) == "integer");
-	
+
 	return val[3][1];
 }
 

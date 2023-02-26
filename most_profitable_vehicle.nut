@@ -22,7 +22,7 @@ function LeagueTable::GetMostProfitableVehicle_Val(company)
 
 			local vehicle = total_profits.Begin();
 			local vehicle_location = GSVehicle.GetLocation(vehicle);
-			
+
 			switch (GSVehicle.GetVehicleType(vehicle)) {
 				case GSVehicle.VT_RAIL:  veh_type_str = GSText.STR_MOST_PROFITABLE_VEHICLE_TRAIN; break;
 				case GSVehicle.VT_AIR:   veh_type_str = GSText.STR_MOST_PROFITABLE_VEHICLE_PLANE; break;
@@ -33,7 +33,7 @@ function LeagueTable::GetMostProfitableVehicle_Val(company)
 					break;
 				}
 			}
-			
+
 			local average = 0;
 			local best_value = 0x8000000000000000;
 			local worst_value = 0x7FFFFFFFFFFFFFFF;
@@ -42,13 +42,13 @@ function LeagueTable::GetMostProfitableVehicle_Val(company)
 				if (value > best_value) best_value = value;
 				if (value < worst_value) worst_value = value;
 			}
-			
+
 			average = average / total_profits.Count();
 			local ratio = 0;
 			if (best_value >= 0 && average >= 0) {
 				ratio = average * 100 / (best_value != 0 ? best_value : 1);
 			}
-			
+
 			rating = total_profits.GetValue(vehicle);
 			score.p = [ worst_value, average, best_value, ratio ];
 			element.p = [ SetText(veh_type_str), vehicle ];
