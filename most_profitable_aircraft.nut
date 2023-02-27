@@ -1,8 +1,8 @@
-function LeagueTable::GetMostProfitableShip_Val(company)
+function LeagueTable::GetMostProfitableAircraft_Val(company)
 {
 	local rating = 0;
-	local score = SetText(GetMostProfitableShip_ScoreString(), [ 0, 0, 0, 0 ]);
-	local element = SetText(GSText.STR_MOST_PROFITABLE_SHIP_NONE, [ -1 ]);
+	local score = SetText(GetMostProfitableAircraft_ScoreString(), [ 0, 0, 0, 0 ]);
+	local element = SetText(GSText.STR_MOST_PROFITABLE_AIRCRAFT_NONE, [ -1 ]);
 	local link = [ GSLeagueTable.LINK_COMPANY, company ];
 
 	if (GSCompany.ResolveCompanyID(company) != GSCompany.COMPANY_INVALID) {
@@ -10,7 +10,7 @@ function LeagueTable::GetMostProfitableShip_Val(company)
 		local total_profits = GSList();
 		local vehicle_list = GSVehicleList();
 		vehicle_list.Valuate(GSVehicle.GetVehicleType);
-		vehicle_list.KeepValue(GSVehicle.VT_WATER);
+		vehicle_list.KeepValue(GSVehicle.VT_AIR);
 		if (vehicle_list.Count() != 0) {
 			vehicle_list.Valuate(GSVehicle.GetProfitThisYear);
 			total_profits.AddList(vehicle_list);
@@ -40,7 +40,7 @@ function LeagueTable::GetMostProfitableShip_Val(company)
 
 			rating = total_profits.GetValue(vehicle);
 			score.p = [ worst_value, average, best_value, ratio ];
-			element = SetText(GetMostProfitableShip_ElementString(), [ vehicle ]);
+			element = SetText(GetMostProfitableAircraft_ElementString(), [ vehicle ]);
 			link = [ GSLeagueTable.LINK_TILE, vehicle_location ];
 		}
 	}
@@ -48,27 +48,27 @@ function LeagueTable::GetMostProfitableShip_Val(company)
 	return [ rating, score, element, link ];
 }
 
-function LeagueTable::GetMostProfitableShip_ScoreString()
+function LeagueTable::GetMostProfitableAircraft_ScoreString()
 {
-	return GSText.STR_MOST_PROFITABLE_SHIP_SCORE;
+	return GSText.STR_MOST_PROFITABLE_AIRCRAFT_SCORE;
 }
 
-function LeagueTable::GetMostProfitableShip_TitleString()
+function LeagueTable::GetMostProfitableAircraft_TitleString()
 {
-	return GSText.STR_MOST_PROFITABLE_SHIP_TITLE;
+	return GSText.STR_MOST_PROFITABLE_AIRCRAFT_TITLE;
 }
 
-function LeagueTable::GetMostProfitableShip_HeaderString()
+function LeagueTable::GetMostProfitableAircraft_HeaderString()
 {
-	return GSText.STR_MOST_PROFITABLE_SHIP_HEADER;
+	return GSText.STR_MOST_PROFITABLE_AIRCRAFT_HEADER;
 }
 
-function LeagueTable::GetMostProfitableShip_FooterString()
+function LeagueTable::GetMostProfitableAircraft_FooterString()
 {
-	return GSText.STR_MOST_PROFITABLE_SHIP_FOOTER;
+	return GSText.STR_MOST_PROFITABLE_AIRCRAFT_FOOTER;
 }
 
-function LeagueTable::GetMostProfitableShip_ElementString()
+function LeagueTable::GetMostProfitableAircraft_ElementString()
 {
-	return GSText.STR_MOST_PROFITABLE_SHIP_ELEMENT;
+	return GSText.STR_MOST_PROFITABLE_AIRCRAFT_ELEMENT;
 }
