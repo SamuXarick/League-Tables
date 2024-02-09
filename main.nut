@@ -62,7 +62,7 @@ function LeagueTable::Start()
 		}
 	}
 
-	while (true) {
+	do {
 		while (GSEventController.IsEventWaiting()) {
 			local e = GSEventController.GetNextEvent();
 
@@ -145,7 +145,7 @@ function LeagueTable::Start()
 			}
 		}
 		force_update = false;
-	}
+	} while (GSController.Sleep(1));
 }
 
 function LeagueTable::LinkType(val)
