@@ -26,6 +26,8 @@ class LeagueTable extends GSController
 		}
 	}
 
+	force_update = false;
+
 	function Start();
 	function Save();
 	function Load(version, data);
@@ -47,7 +49,6 @@ function LeagueTable::Load(version, data)
 
 function LeagueTable::Start()
 {
-	local force_update = false;
 	foreach (league in this.tables) {
 		if (league.id == null) {
 			league.id = GSLeagueTable.New(GSText(GetLeagueTitle(league.name)), GSText(GetLeagueHeader(league.name)), GSText(GetLeagueFooter(league.name)));
@@ -56,7 +57,7 @@ function LeagueTable::Start()
 					assert(league.el[c_id] == null);
 					local c_val = GetLeagueVal(league.name, c_id);
 					league.el[c_id] = GSLeagueTable.NewElement(league.id, Rating(c_val), c_id, GetText(Element(c_val)), GetText(Score(c_val), 0), LinkType(c_val), LinkTarget(c_val));
-					force_update = true;
+					this.force_update = true;
 				}
 			}
 		}
@@ -70,10 +71,10 @@ function LeagueTable::Start()
 				local ec = GSEventCompanyNew.Convert(e);
 				local c_id = ec.GetCompanyID();
 				foreach (league in this.tables) {
-					assert(league.el[c_id] == null);
+					if (league.el[c_id] != null) continue;
 					local c_val = GetLeagueVal(league.name, c_id);
 					league.el[c_id] = GSLeagueTable.NewElement(league.id, Rating(c_val), c_id, GetText(Element(c_val)), GetText(Score(c_val), 0), LinkType(c_val), LinkTarget(c_val));
-					force_update = true;
+					this.force_update = true;
 				}
 			}
 
@@ -84,7 +85,7 @@ function LeagueTable::Start()
 					assert(league.el[c_id] != null);
 					GSLeagueTable.RemoveElement(league.el[c_id]);
 					league.el[c_id] = null;
-					force_update = true;
+					this.force_update = true;
 				}
 			}
 
@@ -95,13 +96,13 @@ function LeagueTable::Start()
 					assert(league.el[c_id] != null);
 					GSLeagueTable.RemoveElement(league.el[c_id]);
 					league.el[c_id] = null;
-					force_update = true;
+					this.force_update = true;
 				}
 			}
 		}
 
 		foreach (window_number, league in this.tables) {
-			if (!force_update && !GSGame.IsMultiplayer() && !GSWindow.IsOpen(GSWindow.WC_COMPANY_LEAGUE, window_number)) continue;
+			if (!this.force_update && !GSGame.IsMultiplayer() && !GSWindow.IsOpen(GSWindow.WC_COMPANY_LEAGUE, window_number)) continue;
 			local old_val = clone league.val;
 			local old_pct = clone league.pct;
 			foreach (c_id, _ in league.val) {
@@ -135,16 +136,16 @@ function LeagueTable::Start()
 						c_new_pct = new_rating * 100 / (best_value != 0 ? best_value : 1);
 					}
 					league.pct.rawset(c_id, c_new_pct);
-					if (force_update || new_rating != old_rating || c_new_pct != c_old_pct || TextChanged(Score(c_val), Score(c_old_val))) {
+					if (this.force_update || new_rating != old_rating || c_new_pct != c_old_pct || TextChanged(Score(c_val), Score(c_old_val))) {
 						GSLeagueTable.UpdateElementScore(league.el[c_id], new_rating, GetText(Score(c_val), c_new_pct));
 					}
-					if (force_update || TextChanged(Element(c_val), Element(c_old_val)) || LinkChanged(c_val, c_old_val)) {
+					if (this.force_update || TextChanged(Element(c_val), Element(c_old_val)) || LinkChanged(c_val, c_old_val)) {
 						GSLeagueTable.UpdateElementData(league.el[c_id], c_id, GetText(Element(c_val)), LinkType(c_val), LinkTarget(c_val));
 					}
 				}
 			}
 		}
-		force_update = false;
+		this.force_update = false;
 	} while (GSController.Sleep(1));
 }
 
