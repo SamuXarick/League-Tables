@@ -1,12 +1,11 @@
 function LeagueTable::GetCompanyValueTable_Val(company)
 {
-	local rating = 0;
+	local rating = GSCompany.GetQuarterlyCompanyValue(company, GSCompany.CURRENT_QUARTER);
 	local score = SetText(GetCompanyValueTable_ScoreString(), [ 0, 0, 0 ]);
 	local element = SetText(GetCompanyValueTable_ElementString(), [ company, company ]);
 	local link = [ GSLeagueTable.LINK_COMPANY, company ];
 
 	if (GSCompany.ResolveCompanyID(company) != GSCompany.COMPANY_INVALID) {
-		rating = GSCompany.GetQuarterlyCompanyValue(company, GSCompany.CURRENT_QUARTER);
 		local last_quarter = GSCompany.GetQuarterlyCompanyValue(company, 1);
 		local last_2_quarters = GSCompany.GetQuarterlyCompanyValue(company, 2);
 		local last_3_quarters = GSCompany.GetQuarterlyCompanyValue(company, 3);
