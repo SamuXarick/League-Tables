@@ -1,9 +1,9 @@
-function LeagueTable::GetCanalInfrastructureEfficiency_Val(company)
+function LeagueTables::GetCanalInfrastructureEfficiency_Stats(company)
 {
 	local rating = 0;
-	local score = SetText(GetCanalInfrastructureEfficiency_ScoreString(), [ 0, 0, 0, 0 ]);
-	local element = SetText(GSText.STR_CANAL_INFRASTRUCTURE_EFFICIENCY_NONE, []);
-	local link = [ GSLeagueTable.LINK_COMPANY, company ];
+	local score_text = SetText(GetCanalInfrastructureEfficiency_ScoreString(), [ 0, 0, 0, 0 ]);
+	local element_text = SetText(GSText.STR_CANAL_INFRASTRUCTURE_EFFICIENCY_NONE);
+	local link_info = [ GSLeagueTable.LINK_COMPANY, company ];
 
 	if (GSCompany.ResolveCompanyID(company) != GSCompany.COMPANY_INVALID) {
 		local company_scope = GSCompanyMode(company);
@@ -13,12 +13,13 @@ function LeagueTable::GetCanalInfrastructureEfficiency_Val(company)
 		local vehicle_list = GSVehicleList();
 		vehicle_list.Valuate(GSVehicle.GetVehicleType);
 		vehicle_list.KeepValue(GSVehicle.VT_WATER);
-		vehicle_list.Valuate(GSVehicle.GetProfitLastYear);
+		local get_profits = function(vehicle_id) { return GSVehicle.GetProfitLastYear(vehicle_id) + GSVehicle.GetProfitThisYear(vehicle_id); };
+		vehicle_list.Valuate(get_profits);
 
 		local maintenance_cost = GSInfrastructure.GetMonthlyInfrastructureCosts(company, GSInfrastructure.INFRASTRUCTURE_CANAL);
 		local profits = 0;
-		foreach (vehicle, value in vehicle_list) {
-			profits += value + GSVehicle.GetProfitThisYear(vehicle);
+		foreach (value in vehicle_list) {
+			profits += value;
 		}
 		local current_date = GSDate.GetCurrentDate();
 		local current_year = GSDate.GetYear(current_date);
@@ -33,7 +34,7 @@ function LeagueTable::GetCanalInfrastructureEfficiency_Val(company)
 			local station_vehicle_list = GSVehicleList_Station(station);
 			station_vehicle_list.Valuate(GSVehicle.GetVehicleType);
 			station_vehicle_list.KeepValue(GSVehicle.VT_WATER);
-			if (station_vehicle_list.Count() > 0) {
+			if (!station_vehicle_list.IsEmpty()) {
 				visited_sts++;
 				foreach (vehicle, _ in station_vehicle_list) {
 					local order_count = GSOrder.GetOrderCount(vehicle);
@@ -52,7 +53,7 @@ function LeagueTable::GetCanalInfrastructureEfficiency_Val(company)
 				}
 			}
 		}
-		local pct = num_sts > 0 ? (visited_sts * 100 / num_sts) : 0;
+		local visited_pct = num_sts > 0 ? (visited_sts * 100 / num_sts) : 0;
 
 		local cargo_list = GSCargoList();
 		local best_rated_station = -1;
@@ -70,40 +71,40 @@ function LeagueTable::GetCanalInfrastructureEfficiency_Val(company)
 		}
 
 		rating = efficiency;
-		score.p = [ visited_sts, num_sts, pct, efficiency ];
+		score_text.params = [ visited_sts, num_sts, visited_pct, efficiency ];
 		if (GSStation.IsValidStation(best_rated_station)) {
 			local station_tile = loading_station_list.GetValue(best_rated_station);
 
-			element.str = GetCanalInfrastructureEfficiency_ElementString();
-			element.p = [ best_rated_station, highest_cargo_rating ];
-			link = [ GSLeagueTable.LINK_TILE, station_tile ];
+			element_text.string = GetCanalInfrastructureEfficiency_ElementString();
+			element_text.params = [ best_rated_station, highest_cargo_rating ];
+			link_info = [ GSLeagueTable.LINK_TILE, station_tile ];
 		}
 	}
 
-	return [ rating, score, element, link ];
+	return [ rating, score_text, element_text, link_info ];
 }
 
-function LeagueTable::GetCanalInfrastructureEfficiency_ScoreString()
+function LeagueTables::GetCanalInfrastructureEfficiency_ScoreString()
 {
 	return GSText.STR_CANAL_INFRASTRUCTURE_EFFICIENCY_SCORE;
 }
 
-function LeagueTable::GetCanalInfrastructureEfficiency_TitleString()
+function LeagueTables::GetCanalInfrastructureEfficiency_TitleString()
 {
 	return GSText.STR_CANAL_INFRASTRUCTURE_EFFICIENCY_TITLE;
 }
 
-function LeagueTable::GetCanalInfrastructureEfficiency_HeaderString()
+function LeagueTables::GetCanalInfrastructureEfficiency_HeaderString()
 {
 	return GSText.STR_CANAL_INFRASTRUCTURE_EFFICIENCY_HEADER;
 }
 
-function LeagueTable::GetCanalInfrastructureEfficiency_FooterString()
+function LeagueTables::GetCanalInfrastructureEfficiency_FooterString()
 {
 	return GSText.STR_CANAL_INFRASTRUCTURE_EFFICIENCY_FOOTER;
 }
 
-function LeagueTable::GetCanalInfrastructureEfficiency_ElementString()
+function LeagueTables::GetCanalInfrastructureEfficiency_ElementString()
 {
 	return GSText.STR_CANAL_INFRASTRUCTURE_EFFICIENCY_ELEMENT;
 }

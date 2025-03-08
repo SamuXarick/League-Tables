@@ -1,6 +1,6 @@
-class LeagueTable extends GSController
+class LeagueTables extends GSController
 {
-	names = [
+	static names = [
 		"company_value_table",
 		"most_profitable_vehicle",
 		"rail_infrastructure_efficiency",
@@ -11,275 +11,325 @@ class LeagueTable extends GSController
 		"most_profitable_roadvehicle",
 		"most_profitable_ship",
 		"most_profitable_aircraft",
+		"income_table",
+		"transport_infrastructure_efficiency",
 	];
 
 	tables = [];
+	async_mode = null;
+	update_mode = null;
+	timer = null;
 
-	constructor() {
-		foreach (i, name in this.names) {
-			tables.append({ name = "", id = null, el = array(GSCompany.COMPANY_LAST), val = {}, pct = {} });
-			this.tables[i].name = name;
+	force_update = null;
+
+	constructor()
+	{
+		foreach (i, league in this.names) {
+			tables.append({ name = league, id = null, element = array(GSCompany.COMPANY_LAST), stats = {}, percentage = {} });
 			for (local c_id = GSCompany.COMPANY_FIRST; c_id < GSCompany.COMPANY_LAST; c_id++) {
-				this.tables[i].val.rawset(c_id, [ 0, SetText(GSText.STR_MAIN_EMPTY), SetText(GSText.STR_MAIN_EMPTY), [ GSLeagueTable.LINK_NONE, 0 ] ]);
-				this.tables[i].pct.rawset(c_id, 0);
+				this.tables[i].stats.rawset(c_id, [ 0, SetText(GSText.STR_MAIN_EMPTY), SetText(GSText.STR_MAIN_EMPTY), [ GSLeagueTable.LINK_NONE, 0 ] ]);
+				this.tables[i].percentage.rawset(c_id, 0);
 			}
 		}
-	}
+		this.async_mode = GSController.GetSetting("async_mode") != 0;
+		this.update_mode = GSController.GetSetting("update_mode");
+		this.timer = GSDate.GetCurrentDate();
 
-	force_update = false;
-
-	function Start();
-	function Save();
-	function Load(version, data);
-}
-
-function LeagueTable::Save()
-{
-	return {
-		tables = this.tables
-	};
-}
-
-function LeagueTable::Load(version, data)
-{
-	foreach (i, table in data.tables) {
-		this.tables[i] = clone table;
+		this.force_update = false;
 	}
 }
 
-function LeagueTable::Start()
+function LeagueTables::Start()
 {
-	foreach (league in this.tables) {
-		if (league.id == null) {
-			league.id = GSLeagueTable.New(GSText(GetLeagueTitle(league.name)), GSText(GetLeagueHeader(league.name)), GSText(GetLeagueFooter(league.name)));
-			for (local c_id = GSCompany.COMPANY_FIRST; c_id < GSCompany.COMPANY_LAST; c_id++) {
-				if (GSCompany.ResolveCompanyID(c_id) != GSCompany.COMPANY_INVALID) {
-					assert(league.el[c_id] == null);
-					local c_val = GetLeagueVal(league.name, c_id);
-					league.el[c_id] = GSLeagueTable.NewElement(league.id, Rating(c_val), c_id, GetText(Element(c_val)), GetText(Score(c_val), 0), LinkType(c_val), LinkTarget(c_val));
-					this.force_update = true;
-				}
-			}
-		}
-	}
+	InitializeTables();
 
 	do {
-		while (GSEventController.IsEventWaiting()) {
-			local e = GSEventController.GetNextEvent();
+		this.async_mode = GSController.GetSetting("async_mode") != 0;
+		this.update_mode = GSController.GetSetting("update_mode");
 
-			if (e.GetEventType() == GSEvent.ET_COMPANY_NEW) {
-				local ec = GSEventCompanyNew.Convert(e);
-				local c_id = ec.GetCompanyID();
-				foreach (league in this.tables) {
-					if (league.el[c_id] != null) continue;
-					local c_val = GetLeagueVal(league.name, c_id);
-					league.el[c_id] = GSLeagueTable.NewElement(league.id, Rating(c_val), c_id, GetText(Element(c_val)), GetText(Score(c_val), 0), LinkType(c_val), LinkTarget(c_val));
-					this.force_update = true;
-				}
-			}
+		HandleEvents();
+		UpdateTables(UpdateTimer());
+	} while (true);
+}
 
-			if (e.GetEventType() == GSEvent.ET_COMPANY_BANKRUPT) {
-				local ec = GSEventCompanyBankrupt.Convert(e);
-				local c_id = ec.GetCompanyID();
-				foreach (league in this.tables) {
-					assert(league.el[c_id] != null);
-					GSLeagueTable.RemoveElement(league.el[c_id]);
-					league.el[c_id] = null;
-					this.force_update = true;
-				}
-			}
+function LeagueTables::InitializeTables()
+{
+	local async = this.async_mode && !GSGame.IsMultiplayer();
+	async = GSAsyncMode(async);
 
-			if (e.GetEventType() == GSEvent.ET_COMPANY_MERGER) {
-				local ec = GSEventCompanyMerger.Convert(e);
-				local c_id = ec.GetOldCompanyID();
-				foreach (league in this.tables) {
-					assert(league.el[c_id] != null);
-					GSLeagueTable.RemoveElement(league.el[c_id]);
-					league.el[c_id] = null;
+	foreach (league in this.tables) {
+		if (league.id == null) {
+			league.id = GSLeagueTable.New(GSText(TitleString(league.name)), GSText(HeaderString(league.name)), GSText(FooterString(league.name)));
+			for (local c_id = GSCompany.COMPANY_FIRST; c_id < GSCompany.COMPANY_LAST; c_id++) {
+				if (GSCompany.ResolveCompanyID(c_id) != GSCompany.COMPANY_INVALID) {
+					assert(league.element[c_id] == null);
+					local c_stats = Stats(league.name, c_id);
+					league.element[c_id] = GSLeagueTable.NewElement(league.id, Rating(c_stats), c_id, GetText(Element(c_stats)), GetText(Score(c_stats), 0), LinkType(c_stats), LinkTarget(c_stats));
 					this.force_update = true;
 				}
 			}
 		}
+	}
+}
 
-		foreach (window_number, league in this.tables) {
-			if (!this.force_update && !GSGame.IsMultiplayer() && !GSWindow.IsOpen(GSWindow.WC_COMPANY_LEAGUE, window_number)) continue;
-			local old_val = clone league.val;
-			local old_pct = clone league.pct;
-			foreach (c_id, _ in league.val) {
-				local c_val = GetLeagueVal(league.name, c_id);
-				league.val.rawset(c_id, c_val);
-				GSAdmin.Send({ league_name = league.name, company = c_id, company_val = c_val });
+function LeagueTables::HandleEvents()
+{
+	local async = this.async_mode && !GSGame.IsMultiplayer();
+	async = GSAsyncMode(async);
+
+	while (GSEventController.IsEventWaiting()) {
+		local e = GSEventController.GetNextEvent();
+
+		if (e.GetEventType() == GSEvent.ET_COMPANY_NEW) {
+			local ec = GSEventCompanyNew.Convert(e);
+			local c_id = ec.GetCompanyID();
+			foreach (league in this.tables) {
+				if (league.element[c_id] != null) continue;
+				local c_stats = Stats(league.name, c_id);
+				league.element[c_id] = GSLeagueTable.NewElement(league.id, Rating(c_stats), c_id, GetText(Element(c_stats)), GetText(Score(c_stats), 0), LinkType(c_stats), LinkTarget(c_stats));
+				this.force_update = true;
 			}
+		}
 
-			local best_value = 0x8000000000000000;
-			local worst_value = 0x7FFFFFFFFFFFFFFF;
-			foreach (c_id, c_val in league.val) {
-				if (league.el[c_id] != null) {
-					local rating = Rating(c_val);
-					if (rating > best_value) best_value = rating;
-					if (rating < worst_value) worst_value = rating;
+		if (e.GetEventType() == GSEvent.ET_COMPANY_BANKRUPT) {
+			local ec = GSEventCompanyBankrupt.Convert(e);
+			local c_id = ec.GetCompanyID();
+			foreach (league in this.tables) {
+				assert(league.element[c_id] != null);
+				assert(GSLeagueTable.RemoveElement(league.element[c_id]));
+				league.element[c_id] = null;
+				this.force_update = true;
+			}
+		}
+
+		if (e.GetEventType() == GSEvent.ET_COMPANY_MERGER) {
+			local ec = GSEventCompanyMerger.Convert(e);
+			local c_id = ec.GetOldCompanyID();
+			foreach (league in this.tables) {
+				assert(league.element[c_id] != null);
+				assert(GSLeagueTable.RemoveElement(league.element[c_id]));
+				league.element[c_id] = null;
+				this.force_update = true;
+			}
+		}
+	}
+}
+
+function LeagueTables::UpdateTimer()
+{
+	GSController.Sleep(1);
+
+	local time = GSDate.GetCurrentDate();
+
+	if (this.update_mode != 0) {
+		local prev_year = GSDate.GetYear(this.timer);
+		local cur_year = GSDate.GetYear(time);
+		if (cur_year == prev_year && this.update_mode == 3) return false;
+
+		local prev_month = GSDate.GetMonth(this.timer);
+		local cur_month = GSDate.GetMonth(time);
+		if (cur_month == prev_month && this.update_mode == 2) return false;
+
+		local prev_day = GSDate.GetDayOfMonth(this.timer);
+		local cur_day = GSDate.GetDayOfMonth(time);
+		if (cur_day == prev_day && this.update_mode == 1) return false;
+	}
+
+	this.timer = time;
+	return true;
+}
+
+function LeagueTables::UpdateTables(update)
+{
+	local async = this.async_mode;
+	async = GSAsyncMode(async);
+
+	foreach (window_number, league in this.tables) {
+		if (!update || (this.update_mode == 0 && !this.force_update && !GSGame.IsMultiplayer() && !GSWindow.IsOpen(GSWindow.WC_COMPANY_LEAGUE, window_number))) continue;
+
+		local old_stats = clone league.stats;
+		local old_percentage = clone league.percentage;
+		foreach (c_id, _ in league.stats) {
+			local c_stats = Stats(league.name, c_id);
+			league.stats.rawset(c_id, c_stats);
+			assert(GSAdmin.Send({ league_name = league.name, company = c_id, company_stats = c_stats }));
+		}
+
+		local best_value = 0x8000000000000000;
+		local worst_value = 0x7FFFFFFFFFFFFFFF;
+		foreach (c_id, c_stats in league.stats) {
+			if (league.element[c_id] != null) {
+				local rating = Rating(c_stats);
+				if (rating > best_value) best_value = rating;
+				if (rating < worst_value) worst_value = rating;
+			}
+		}
+		local diff_value = best_value - worst_value;
+		local diff_to_zero = 0 - worst_value;
+
+		foreach (c_id, c_stats in league.stats) {
+			if (league.element[c_id] != null) {
+				local c_old_stats = old_stats.rawget(c_id);
+				local old_rating = Rating(c_old_stats);
+				local new_rating = Rating(c_stats);
+				local c_old_percentage = old_percentage.rawget(c_id);
+				local c_new_percentage = 0;
+				if (diff_to_zero >= 0) {
+					c_new_percentage = (new_rating + diff_to_zero) * 100 / (diff_value != 0 ? diff_value : 1);
+				} else {
+					c_new_percentage = new_rating * 100 / (best_value != 0 ? best_value : 1);
 				}
-			}
-			local diff_value = best_value - worst_value;
-			local diff_to_zero = 0 - worst_value;
-
-			foreach (c_id, c_val in league.val) {
-				if (league.el[c_id] != null) {
-					local c_old_val = old_val.rawget(c_id);
-					local old_rating = Rating(c_old_val);
-					local new_rating = Rating(c_val);
-					local c_old_pct = old_pct.rawget(c_id);
-					local c_new_pct = 0;
-					if (diff_to_zero >= 0) {
-						c_new_pct = (new_rating + diff_to_zero) * 100 / (diff_value != 0 ? diff_value : 1);
-					} else {
-						c_new_pct = new_rating * 100 / (best_value != 0 ? best_value : 1);
-					}
-					league.pct.rawset(c_id, c_new_pct);
-					if (this.force_update || new_rating != old_rating || c_new_pct != c_old_pct || TextChanged(Score(c_val), Score(c_old_val))) {
-						GSLeagueTable.UpdateElementScore(league.el[c_id], new_rating, GetText(Score(c_val), c_new_pct));
-					}
-					if (this.force_update || TextChanged(Element(c_val), Element(c_old_val)) || LinkChanged(c_val, c_old_val)) {
-						GSLeagueTable.UpdateElementData(league.el[c_id], c_id, GetText(Element(c_val)), LinkType(c_val), LinkTarget(c_val));
-					}
+				league.percentage.rawset(c_id, c_new_percentage);
+				if (this.force_update || (update && (new_rating != old_rating || c_new_percentage != c_old_percentage || TextChanged(Score(c_stats), Score(c_old_stats))))) {
+					GSLeagueTable.UpdateElementScore(league.element[c_id], new_rating, GetText(Score(c_stats), c_new_percentage));
+				}
+				if (this.force_update || (update && (TextChanged(Element(c_stats), Element(c_old_stats)) || LinkChanged(c_stats, c_old_stats)))) {
+					GSLeagueTable.UpdateElementData(league.element[c_id], c_id, GetText(Element(c_stats)), LinkType(c_stats), LinkTarget(c_stats));
 				}
 			}
 		}
-		this.force_update = false;
-	} while (GSController.Sleep(1));
+	}
+
+	this.force_update = false;
 }
 
-function LeagueTable::LinkType(val)
+function LeagueTables::LinkType(stats)
 {
-	assert(typeof(val) == "array");
-	assert(val.len() == 4);
-	assert(typeof(val[3]) == "array");
-	assert(val[3].len() == 2);
-	assert(typeof(val[3][0]) == "integer");
+	assert(typeof(stats) == "array");
+	assert(stats.len() == 4);
+	assert(typeof(stats[3]) == "array");
+	assert(stats[3].len() == 2);
+	assert(typeof(stats[3][0]) == "integer");
 
-	return val[3][0];
+	return stats[3][0];
 }
 
-function LeagueTable::LinkTarget(val)
+function LeagueTables::LinkTarget(stats)
 {
-	assert(typeof(val) == "array");
-	assert(val.len() == 4);
-	assert(typeof(val[3]) == "array");
-	assert(val[3].len() == 2);
-	assert(typeof(val[3][1]) == "integer");
+	assert(typeof(stats) == "array");
+	assert(stats.len() == 4);
+	assert(typeof(stats[3]) == "array");
+	assert(stats[3].len() == 2);
+	assert(typeof(stats[3][1]) == "integer");
 
-	return val[3][1];
+	return stats[3][1];
 }
 
-function LeagueTable::LinkChanged(new_val, old_val)
+function LeagueTables::LinkChanged(new_stats, old_stats)
 {
-	return LinkType(new_val) != LinkType(old_val) || LinkTarget(new_val) != LinkTarget(old_val);
+	return LinkType(new_stats) != LinkType(old_stats) || LinkTarget(new_stats) != LinkTarget(old_stats);
 }
 
-function LeagueTable::Rating(val)
+function LeagueTables::Rating(stats)
 {
-	assert(typeof(val) == "array");
-	assert(val.len() == 4);
-	assert(typeof(val[0]) == "integer");
+	assert(typeof(stats) == "array");
+	assert(stats.len() == 4);
+	assert(typeof(stats[0]) == "integer");
 
-	return val[0];
+	return stats[0];
 }
 
-function LeagueTable::Score(val)
+function LeagueTables::Score(stats)
 {
-	assert(typeof(val) == "array");
-	assert(val.len() == 4);
-	assert(typeof(val[1]) == "table");
+	assert(typeof(stats) == "array");
+	assert(stats.len() == 4);
+	assert(typeof(stats[1]) == "table");
 
-	return val[1];
+	return stats[1];
 }
 
-function LeagueTable::Element(val)
+function LeagueTables::Element(stats)
 {
-	assert(typeof(val) == "array");
-	assert(val.len() == 4);
-	assert(typeof(val[2]) == "table");
+	assert(typeof(stats) == "array");
+	assert(stats.len() == 4);
+	assert(typeof(stats[2]) == "table");
 
-	return val[2];
+	return stats[2];
 }
 
-function LeagueTable::GetText(text, last_param = null)
+function LeagueTables::GetText(text, last_param = null)
 {
 	assert(typeof(text) == "table");
-	assert(text.rawin("str"));
-	assert(typeof(text.str) == "integer");
-	assert(text.rawin("p"));
-	assert(typeof(text.p) == "array");
+	assert(text.rawin("string"));
+	assert(typeof(text.string) == "integer");
+	assert(text.rawin("params"));
+	assert(typeof(text.params) == "array");
 
-	local ret = GSText(text.str);
-	foreach (param in text.p) {
+	local gs_text = GSText(text.string);
+	foreach (param in text.params) {
 		if (typeof(param) == "table") {
-			ret.AddParam(GetText(param));
+			gs_text.AddParam(GetText(param));
 		} else {
-			ret.AddParam(param);
+			gs_text.AddParam(param);
 		}
 	}
+
 	if (last_param != null) {
 		assert(typeof(last_param) == "integer");
-		ret.AddParam(last_param);
+		gs_text.AddParam(last_param);
 	}
-	return ret;
+
+	return gs_text;
 }
 
-function LeagueTable::SetText(string, params_array = [])
+function LeagueTables::SetText(string, params_array = [])
 {
 	assert(typeof(string) == "integer");
 	assert(typeof(params_array) == "array");
+
 	return {
-		str = string,
-		p = params_array
+		string = string,
+		params = params_array
 	};
 }
 
-function LeagueTable::TextChanged(new, old)
+function LeagueTables::TextChanged(new, old)
 {
 	assert(typeof(new) == "table");
-	assert(new.rawin("str"));
-	assert(typeof(new.str) == "integer");
-	assert(new.rawin("p"));
-	assert(typeof(new.p) == "array");
+	assert(new.rawin("string"));
+	assert(typeof(new.string) == "integer");
+	assert(new.rawin("params"));
+	assert(typeof(new.params) == "array");
 	assert(typeof(old) == "table");
-	assert(old.rawin("str"));
-	assert(typeof(old.str) == "integer");
-	assert(old.rawin("p"));
-	assert(typeof(old.p) == "array");
+	assert(old.rawin("string"));
+	assert(typeof(old.string) == "integer");
+	assert(old.rawin("params"));
+	assert(typeof(old.params) == "array");
 
-	if (new.str != old.str) return true;
-	if (new.p.len() != old.p.len()) return true;
-	foreach (i, p in new.p) {
-		if (typeof(p) != typeof(old.p[i])) return true;
-		if (typeof(p) == "table") {
-			if (TextChanged(new.p[i], old.p[i])) return true;
+	if (new.string != old.string) return true;
+	if (new.params.len() != old.params.len()) return true;
+	foreach (i, params in new.params) {
+		if (typeof(params) != typeof(old.params[i])) return true;
+		if (typeof(params) == "table") {
+			if (TextChanged(new.params[i], old.params[i])) return true;
 		} else {
-			if (p != old.p[i]) return true;
+			if (params != old.params[i]) return true;
 		}
 	}
+
 	return false;
 }
 
-function LeagueTable::GetLeagueVal(league_name, c_id)
+function LeagueTables::Stats(league_name, c_id)
 {
 	switch (league_name) {
-		case "company_value_table":                  return GetCompanyValueTable_Val(c_id);
-		case "most_profitable_vehicle":              return GetMostProfitableVehicle_Val(c_id);
-		case "rail_infrastructure_efficiency":       return GetRailInfrastructureEfficiency_Val(c_id);
-		case "road_infrastructure_efficiency":       return GetRoadInfrastructureEfficiency_Val(c_id);
-		case "canal_infrastructure_efficiency":      return GetCanalInfrastructureEfficiency_Val(c_id);
-		case "airport_infrastructure_efficiency":    return GetAirportInfrastructureEfficiency_Val(c_id);
-		case "most_profitable_train":                return GetMostProfitableTrain_Val(c_id);
-		case "most_profitable_roadvehicle":          return GetMostProfitableRoadVehicle_Val(c_id);
-		case "most_profitable_ship":                 return GetMostProfitableShip_Val(c_id);
-		case "most_profitable_aircraft":             return GetMostProfitableAircraft_Val(c_id);
-		default: assert(false);
+		case "company_value_table":                  return GetCompanyValueTable_Stats(c_id);
+		case "most_profitable_vehicle":              return GetMostProfitableVehicle_Stats(c_id);
+		case "rail_infrastructure_efficiency":       return GetRailInfrastructureEfficiency_Stats(c_id);
+		case "road_infrastructure_efficiency":       return GetRoadInfrastructureEfficiency_Stats(c_id);
+		case "canal_infrastructure_efficiency":      return GetCanalInfrastructureEfficiency_Stats(c_id);
+		case "airport_infrastructure_efficiency":    return GetAirportInfrastructureEfficiency_Stats(c_id);
+		case "most_profitable_train":                return GetMostProfitableTrain_Stats(c_id);
+		case "most_profitable_roadvehicle":          return GetMostProfitableRoadVehicle_Stats(c_id);
+		case "most_profitable_ship":                 return GetMostProfitableShip_Stats(c_id);
+		case "most_profitable_aircraft":             return GetMostProfitableAircraft_Stats(c_id);
+		case "income_table":                         return GetIncomeTable_Stats(c_id);
+		case "transport_infrastructure_efficiency":  return GetTransportInfrastructureEfficiency_Stats(c_id);
+		default: throw "Invalid league_name: " + league_name;
 	}
 }
 
-function LeagueTable::GetLeagueScoreString(league_name)
+function LeagueTables::ScoreString(league_name)
 {
 	switch (league_name) {
 		case "company_value_table":                  return GetCompanyValueTable_ScoreString();
@@ -292,11 +342,13 @@ function LeagueTable::GetLeagueScoreString(league_name)
 		case "most_profitable_roadvehicle":          return GetMostProfitableRoadVehicle_ScoreString();
 		case "most_profitable_ship":                 return GetMostProfitableShip_ScoreString();
 		case "most_profitable_aircraft":             return GetMostProfitableAircraft_ScoreString();
-		default: assert(false);
+		case "income_table":                         return GetIncomeTable_ScoreString();
+		case "transport_infrastructure_efficiency":  return GetTransportInfrastructureEfficiency_ScoreString();
+		default: throw "Invalid league_name: " + league_name;
 	}
 }
 
-function LeagueTable::GetLeagueTitle(league_name)
+function LeagueTables::TitleString(league_name)
 {
 	switch (league_name) {
 		case "company_value_table":                  return GetCompanyValueTable_TitleString();
@@ -309,11 +361,13 @@ function LeagueTable::GetLeagueTitle(league_name)
 		case "most_profitable_roadvehicle":          return GetMostProfitableRoadVehicle_TitleString();
 		case "most_profitable_ship":                 return GetMostProfitableShip_TitleString();
 		case "most_profitable_aircraft":             return GetMostProfitableAircraft_TitleString();
-		default: assert(false);
+		case "income_table":                         return GetIncomeTable_TitleString();
+		case "transport_infrastructure_efficiency":  return GetTransportInfrastructureEfficiency_TitleString();
+		default: throw "Invalid league_name: " + league_name;
 	}
 }
 
-function LeagueTable::GetLeagueHeader(league_name)
+function LeagueTables::HeaderString(league_name)
 {
 	switch (league_name) {
 		case "company_value_table":                  return GetCompanyValueTable_HeaderString();
@@ -326,11 +380,13 @@ function LeagueTable::GetLeagueHeader(league_name)
 		case "most_profitable_roadvehicle":          return GetMostProfitableRoadVehicle_HeaderString();
 		case "most_profitable_ship":                 return GetMostProfitableShip_HeaderString();
 		case "most_profitable_aircraft":             return GetMostProfitableAircraft_HeaderString();
-		default: assert(false);
+		case "income_table":                         return GetIncomeTable_HeaderString();
+		case "transport_infrastructure_efficiency":  return GetTransportInfrastructureEfficiency_HeaderString();
+		default: throw "Invalid league_name: " + league_name;
 	}
 }
 
-function LeagueTable::GetLeagueFooter(league_name)
+function LeagueTables::FooterString(league_name)
 {
 	switch (league_name) {
 		case "company_value_table":                  return GetCompanyValueTable_FooterString();
@@ -343,17 +399,23 @@ function LeagueTable::GetLeagueFooter(league_name)
 		case "most_profitable_roadvehicle":          return GetMostProfitableRoadVehicle_FooterString();
 		case "most_profitable_ship":                 return GetMostProfitableShip_FooterString();
 		case "most_profitable_aircraft":             return GetMostProfitableAircraft_FooterString();
-		default: assert(false);
+		case "income_table":                         return GetIncomeTable_FooterString();
+		case "transport_infrastructure_efficiency":  return GetTransportInfrastructureEfficiency_FooterString();
+		default: throw "Invalid league_name: " + league_name;
 	}
 }
 
-require("company_value_table.nut");
-require("most_profitable_vehicle.nut");
-require("rail_infrastructure_efficiency.nut");
-require("road_infrastructure_efficiency.nut");
-require("canal_infrastructure_efficiency.nut");
-require("airport_infrastructure_efficiency.nut");
-require("most_profitable_train.nut");
-require("most_profitable_roadvehicle.nut");
-require("most_profitable_ship.nut");
-require("most_profitable_aircraft.nut");
+require("saveload.nut");
+
+require("leagues/company_value_table.nut");
+require("leagues/most_profitable_vehicle.nut");
+require("leagues/rail_infrastructure_efficiency.nut");
+require("leagues/road_infrastructure_efficiency.nut");
+require("leagues/canal_infrastructure_efficiency.nut");
+require("leagues/airport_infrastructure_efficiency.nut");
+require("leagues/most_profitable_train.nut");
+require("leagues/most_profitable_roadvehicle.nut");
+require("leagues/most_profitable_ship.nut");
+require("leagues/most_profitable_aircraft.nut");
+require("leagues/income_table.nut");
+require("leagues/transport_infrastructure_efficiency.nut");

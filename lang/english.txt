@@ -1,90 +1,116 @@
 # main
-STR_MAIN_EMPTY                                :
+STR_MAIN_EMPTY                                     :
 
 # company_value_table
-STR_COMPANY_VALUE_TABLE_TITLE                 : {WHITE}Company Value Table
-STR_COMPANY_VALUE_TABLE_HEADER                : {ORANGE}Ranks companies by their current quarter value.
-STR_COMPANY_VALUE_TABLE_FOOTER                : {WHITE}Company name{}{SILVER}Quarter over quarter difference{ORANGE}/{YELLOW}Difference to last quarter{ORANGE}/{GREEN}Current quarter value{}{ORANGE}This company's quarter/Best of all companies
-STR_COMPANY_VALUE_TABLE_ELEMENT               : {WHITE}{COMPANY}{BLACK} {COMPANY_NUM}
-STR_COMPANY_VALUE_TABLE_SCORE                 : {SILVER}{CURRENCY_SHORT}{ORANGE}/{YELLOW}{CURRENCY_SHORT}{ORANGE}/{GREEN}{CURRENCY_SHORT}{ORANGE} ({COMMA}%)
+STR_COMPANY_VALUE_TABLE_TITLE                      :{WHITE}Company Value Table
+STR_COMPANY_VALUE_TABLE_HEADER                     :{ORANGE}Ranks companies by their current quarter value.
+STR_COMPANY_VALUE_TABLE_FOOTER                     :{WHITE}Company name{}{SILVER}Quarter over quarter difference{ORANGE}/{YELLOW}Difference to last quarter{ORANGE}/{GREEN}Current quarter value{}{ORANGE}This company's quarter/Best of all companies
+STR_COMPANY_VALUE_TABLE_ELEMENT                    :{WHITE}{COMPANY}{BLACK} {COMPANY_NUM}
+STR_COMPANY_VALUE_TABLE_SCORE                      :{SILVER}{CURRENCY_SHORT}{ORANGE}/{YELLOW}{CURRENCY_SHORT}{ORANGE}/{GREEN}{CURRENCY_SHORT}{ORANGE} ({COMMA}%)
 
 # most_profitable_vehicle
-STR_MOST_PROFITABLE_VEHICLE_TITLE             : {WHITE}Most Profitable Vehicle
-STR_MOST_PROFITABLE_VEHICLE_HEADER            : {ORANGE}Ranks companies based on their vehicle with the best sum of current and last year profits.
-STR_MOST_PROFITABLE_VEHICLE_FOOTER            : {WHITE}Best vehicle's name{}{SILVER}Worst profit{ORANGE}/{YELLOW}Average profit{ORANGE}/{GREEN}Best profit{}{YELLOW}Average/Best of this company{}{ORANGE}Best of this company/Best of all companies
-STR_MOST_PROFITABLE_VEHICLE_ELEMENT           : {WHITE}{STRING} {VEHICLE}
-STR_MOST_PROFITABLE_VEHICLE_SCORE             : {SILVER}{CURRENCY_SHORT}{ORANGE}/{YELLOW}{CURRENCY_SHORT}{ORANGE}/{GREEN}{CURRENCY_SHORT} {YELLOW}({COMMA}%) {ORANGE}({COMMA}%)
-STR_MOST_PROFITABLE_VEHICLE_TRAIN             : {TRAIN}
-STR_MOST_PROFITABLE_VEHICLE_LORRY             : {LORRY}
-STR_MOST_PROFITABLE_VEHICLE_BUS               : {BUS}
-STR_MOST_PROFITABLE_VEHICLE_PLANE             : {PLANE}
-STR_MOST_PROFITABLE_VEHICLE_SHIP              : {SHIP}
-STR_MOST_PROFITABLE_VEHICLE_NONE              :
+STR_MOST_PROFITABLE_VEHICLE_TITLE                  :{WHITE}Most Profitable Vehicle
+STR_MOST_PROFITABLE_VEHICLE_HEADER                 :{ORANGE}Ranks companies based on their vehicle with the best sum of current and last year profits.
+STR_MOST_PROFITABLE_VEHICLE_FOOTER                 :{WHITE}Best vehicle's name{}{SILVER}Worst profit{ORANGE}/{YELLOW}Average profit{ORANGE}/{GREEN}Best profit{}{YELLOW}Average/Best of this company{}{ORANGE}Best of this company/Best of all companies
+STR_MOST_PROFITABLE_VEHICLE_ELEMENT                :{WHITE}{STRING} {VEHICLE}
+STR_MOST_PROFITABLE_VEHICLE_SCORE                  :{SILVER}{CURRENCY_SHORT}{ORANGE}/{YELLOW}{CURRENCY_SHORT}{ORANGE}/{GREEN}{CURRENCY_SHORT} {YELLOW}({COMMA}%) {ORANGE}({COMMA}%)
+STR_MOST_PROFITABLE_VEHICLE_TRAIN                  :{TRAIN}
+STR_MOST_PROFITABLE_VEHICLE_BUS                    :{BUS}
+STR_MOST_PROFITABLE_VEHICLE_LORRY                  :{LORRY}
+STR_MOST_PROFITABLE_VEHICLE_SHIP                   :{SHIP}
+STR_MOST_PROFITABLE_VEHICLE_PLANE                  :{PLANE}
+STR_MOST_PROFITABLE_VEHICLE_NONE                   :
 
 # rail_infrastructure_efficiency
-STR_RAIL_INFRASTRUCTURE_EFFICIENCY_TITLE      : {WHITE}Rail Infrastructure Efficiency
-STR_RAIL_INFRASTRUCTURE_EFFICIENCY_HEADER     : {ORANGE}Ranks companies by profit of trains per number of rail pieces.
-STR_RAIL_INFRASTRUCTURE_EFFICIENCY_FOOTER     : {WHITE}Best rated train station's name (rating percent){}{SILVER}Visited train stations{ORANGE}/{YELLOW}Total train stations (Visited percent){}{GREEN}Profit of trains per number of rail pieces{}{ORANGE}This company rail efficiency/Best of all companies
-STR_RAIL_INFRASTRUCTURE_EFFICIENCY_ELEMENT    : {WHITE}{TRAIN} {STATION} ({COMMA}%)
-STR_RAIL_INFRASTRUCTURE_EFFICIENCY_SCORE      : {SILVER}{COMMA}{ORANGE}/{YELLOW}{COMMA} ({COMMA}%) {GREEN}{CURRENCY_SHORT}{ORANGE} ({COMMA}%)
-STR_RAIL_INFRASTRUCTURE_EFFICIENCY_NONE       :
+STR_RAIL_INFRASTRUCTURE_EFFICIENCY_TITLE           :{WHITE}Rail Infrastructure Efficiency
+STR_RAIL_INFRASTRUCTURE_EFFICIENCY_HEADER          :{ORANGE}Ranks companies by profit of trains per number of rail pieces.
+STR_RAIL_INFRASTRUCTURE_EFFICIENCY_FOOTER          :{WHITE}Best rated train station's name (rating percent){}{SILVER}Visited train stations{ORANGE}/{YELLOW}Total train stations (Visited percent){}{GREEN}Profit of trains per number of rail pieces{}{ORANGE}This company rail efficiency/Best of all companies
+STR_RAIL_INFRASTRUCTURE_EFFICIENCY_ELEMENT         :{WHITE}{TRAIN} {STATION} ({COMMA}%)
+STR_RAIL_INFRASTRUCTURE_EFFICIENCY_SCORE           :{SILVER}{COMMA}{ORANGE}/{YELLOW}{COMMA} ({COMMA}%) {GREEN}{CURRENCY_SHORT}{ORANGE} ({COMMA}%)
+STR_RAIL_INFRASTRUCTURE_EFFICIENCY_NONE            :
 
 # road_infrastructure_efficiency
-STR_ROAD_INFRASTRUCTURE_EFFICIENCY_TITLE      : {WHITE}Road Infrastructure Efficiency
-STR_ROAD_INFRASTRUCTURE_EFFICIENCY_HEADER     : {ORANGE}Ranks companies by profit of road vehicles per number of road pieces.
-STR_ROAD_INFRASTRUCTURE_EFFICIENCY_FOOTER     : {WHITE}Best rated road vehicle station's name (rating percent){}{SILVER}Visited road vehicle stations{ORANGE}/{YELLOW}Total road vehicle stations (Visited percent){}{GREEN}Profit of road vehicles per number of road pieces{}{ORANGE}This company road efficiency/Best of all companies
-STR_ROAD_INFRASTRUCTURE_EFFICIENCY_ELEMENT    : {WHITE}{STRING} {STATION} ({COMMA}%)
-STR_ROAD_INFRASTRUCTURE_EFFICIENCY_SCORE      : {SILVER}{COMMA}{ORANGE}/{YELLOW}{COMMA} ({COMMA}%) {GREEN}{CURRENCY_SHORT}{ORANGE} ({COMMA}%)
-STR_ROAD_INFRASTRUCTURE_EFFICIENCY_LORRY      : {LORRY}
-STR_ROAD_INFRASTRUCTURE_EFFICIENCY_BUS        : {BUS}
-STR_ROAD_INFRASTRUCTURE_EFFICIENCY_NONE       :
+STR_ROAD_INFRASTRUCTURE_EFFICIENCY_TITLE           :{WHITE}Road Infrastructure Efficiency
+STR_ROAD_INFRASTRUCTURE_EFFICIENCY_HEADER          :{ORANGE}Ranks companies by profit of road vehicles per number of road pieces.
+STR_ROAD_INFRASTRUCTURE_EFFICIENCY_FOOTER          :{WHITE}Best rated road vehicle station's name (rating percent){}{SILVER}Visited road vehicle stations{ORANGE}/{YELLOW}Total road vehicle stations (Visited percent){}{GREEN}Profit of road vehicles per number of road pieces{}{ORANGE}This company road efficiency/Best of all companies
+STR_ROAD_INFRASTRUCTURE_EFFICIENCY_ELEMENT         :{WHITE}{STRING} {STATION} ({COMMA}%)
+STR_ROAD_INFRASTRUCTURE_EFFICIENCY_SCORE           :{SILVER}{COMMA}{ORANGE}/{YELLOW}{COMMA} ({COMMA}%) {GREEN}{CURRENCY_SHORT}{ORANGE} ({COMMA}%)
+STR_ROAD_INFRASTRUCTURE_EFFICIENCY_BUS             :{BUS}
+STR_ROAD_INFRASTRUCTURE_EFFICIENCY_LORRY           :{LORRY}
+STR_ROAD_INFRASTRUCTURE_EFFICIENCY_NONE            :
 
 # canal_infrastructure_efficiency
-STR_CANAL_INFRASTRUCTURE_EFFICIENCY_TITLE     : {WHITE}Canal Infrastructure Efficiency
-STR_CANAL_INFRASTRUCTURE_EFFICIENCY_HEADER    : {ORANGE}Ranks companies by profit of ships per number of canal pieces.
-STR_CANAL_INFRASTRUCTURE_EFFICIENCY_FOOTER    : {WHITE}Best rated ship station's name (rating percent){}{SILVER}Visited ship stations{ORANGE}/{YELLOW}Total ship stations (Visited percent){}{GREEN}Profit of ships per number of canal pieces{}{ORANGE}This company canal efficiency/Best of all companies
-STR_CANAL_INFRASTRUCTURE_EFFICIENCY_ELEMENT   : {WHITE}{SHIP} {STATION} ({COMMA}%)
-STR_CANAL_INFRASTRUCTURE_EFFICIENCY_SCORE     : {SILVER}{COMMA}{ORANGE}/{YELLOW}{COMMA} ({COMMA}%) {GREEN}{CURRENCY_SHORT}{ORANGE} ({COMMA}%)
-STR_CANAL_INFRASTRUCTURE_EFFICIENCY_NONE      :
+STR_CANAL_INFRASTRUCTURE_EFFICIENCY_TITLE          :{WHITE}Canal Infrastructure Efficiency
+STR_CANAL_INFRASTRUCTURE_EFFICIENCY_HEADER         :{ORANGE}Ranks companies by profit of ships per number of canal pieces.
+STR_CANAL_INFRASTRUCTURE_EFFICIENCY_FOOTER         :{WHITE}Best rated ship station's name (rating percent){}{SILVER}Visited ship stations{ORANGE}/{YELLOW}Total ship stations (Visited percent){}{GREEN}Profit of ships per number of canal pieces{}{ORANGE}This company canal efficiency/Best of all companies
+STR_CANAL_INFRASTRUCTURE_EFFICIENCY_ELEMENT        :{WHITE}{SHIP} {STATION} ({COMMA}%)
+STR_CANAL_INFRASTRUCTURE_EFFICIENCY_SCORE          :{SILVER}{COMMA}{ORANGE}/{YELLOW}{COMMA} ({COMMA}%) {GREEN}{CURRENCY_SHORT}{ORANGE} ({COMMA}%)
+STR_CANAL_INFRASTRUCTURE_EFFICIENCY_NONE           :
 
 # airport_infrastructure_efficiency
-STR_AIRPORT_INFRASTRUCTURE_EFFICIENCY_TITLE   : {WHITE}Airport Infrastructure Efficiency
-STR_AIRPORT_INFRASTRUCTURE_EFFICIENCY_HEADER  : {ORANGE}Ranks companies by profit of aircraft per number of airport pieces.
-STR_AIRPORT_INFRASTRUCTURE_EFFICIENCY_FOOTER  : {WHITE}Best rated aircraft station's name (rating percent){}{SILVER}Visited aircraft stations{ORANGE}/{YELLOW}Total aircraft stations (Visited percent){}{GREEN}Profit of aircraft per number of airport pieces{}{ORANGE}This company airport efficiency/Best of all companies
-STR_AIRPORT_INFRASTRUCTURE_EFFICIENCY_ELEMENT : {WHITE}{PLANE} {STATION} ({COMMA}%)
-STR_AIRPORT_INFRASTRUCTURE_EFFICIENCY_SCORE   : {SILVER}{COMMA}{ORANGE}/{YELLOW}{COMMA} ({COMMA}%) {GREEN}{CURRENCY_SHORT}{ORANGE} ({COMMA}%)
-STR_AIRPORT_INFRASTRUCTURE_EFFICIENCY_NONE    :
+STR_AIRPORT_INFRASTRUCTURE_EFFICIENCY_TITLE        :{WHITE}Airport Infrastructure Efficiency
+STR_AIRPORT_INFRASTRUCTURE_EFFICIENCY_HEADER       :{ORANGE}Ranks companies by profit of aircraft per number of airport pieces.
+STR_AIRPORT_INFRASTRUCTURE_EFFICIENCY_FOOTER       :{WHITE}Best rated aircraft station's name (rating percent){}{SILVER}Visited aircraft stations{ORANGE}/{YELLOW}Total aircraft stations (Visited percent){}{GREEN}Profit of aircraft per number of airport pieces{}{ORANGE}This company airport efficiency/Best of all companies
+STR_AIRPORT_INFRASTRUCTURE_EFFICIENCY_ELEMENT      :{WHITE}{PLANE} {STATION} ({COMMA}%)
+STR_AIRPORT_INFRASTRUCTURE_EFFICIENCY_SCORE        :{SILVER}{COMMA}{ORANGE}/{YELLOW}{COMMA} ({COMMA}%) {GREEN}{CURRENCY_SHORT}{ORANGE} ({COMMA}%)
+STR_AIRPORT_INFRASTRUCTURE_EFFICIENCY_NONE         :
 
 # most_profitable_train
-STR_MOST_PROFITABLE_TRAIN_TITLE               : {WHITE}Most Profitable Train
-STR_MOST_PROFITABLE_TRAIN_HEADER              : {ORANGE}Ranks companies based on their train with the best sum of current and last year profits.
-STR_MOST_PROFITABLE_TRAIN_FOOTER              : {WHITE}Best train's name{}{SILVER}Worst profit{ORANGE}/{YELLOW}Average profit{ORANGE}/{GREEN}Best profit{}{YELLOW}Average/Best of this company{}{ORANGE}Best of this company/Best of all companies
-STR_MOST_PROFITABLE_TRAIN_ELEMENT             : {WHITE}{TRAIN} {VEHICLE}
-STR_MOST_PROFITABLE_TRAIN_SCORE               : {SILVER}{CURRENCY_SHORT}{ORANGE}/{YELLOW}{CURRENCY_SHORT}{ORANGE}/{GREEN}{CURRENCY_SHORT} {YELLOW}({COMMA}%) {ORANGE}({COMMA}%)
-STR_MOST_PROFITABLE_TRAIN_NONE                :
+STR_MOST_PROFITABLE_TRAIN_TITLE                    :{WHITE}Most Profitable Train
+STR_MOST_PROFITABLE_TRAIN_HEADER                   :{ORANGE}Ranks companies based on their train with the best sum of current and last year profits.
+STR_MOST_PROFITABLE_TRAIN_FOOTER                   :{WHITE}Best train's name{}{SILVER}Worst profit{ORANGE}/{YELLOW}Average profit{ORANGE}/{GREEN}Best profit{}{YELLOW}Average/Best of this company{}{ORANGE}Best of this company/Best of all companies
+STR_MOST_PROFITABLE_TRAIN_ELEMENT                  :{WHITE}{TRAIN} {VEHICLE}
+STR_MOST_PROFITABLE_TRAIN_SCORE                    :{SILVER}{CURRENCY_SHORT}{ORANGE}/{YELLOW}{CURRENCY_SHORT}{ORANGE}/{GREEN}{CURRENCY_SHORT} {YELLOW}({COMMA}%) {ORANGE}({COMMA}%)
+STR_MOST_PROFITABLE_TRAIN_NONE                     :
 
 # most_profitable_roadvehicle
-STR_MOST_PROFITABLE_ROADVEHICLE_TITLE         : {WHITE}Most Profitable Road Vehicle
-STR_MOST_PROFITABLE_ROADVEHICLE_HEADER        : {ORANGE}Ranks companies based on their road vehicle with the best sum of current and last year profits.
-STR_MOST_PROFITABLE_ROADVEHICLE_FOOTER        : {WHITE}Best road vehicle's name{}{SILVER}Worst profit{ORANGE}/{YELLOW}Average profit{ORANGE}/{GREEN}Best profit{}{YELLOW}Average/Best of this company{}{ORANGE}Best of this company/Best of all companies
-STR_MOST_PROFITABLE_ROADVEHICLE_ELEMENT       : {WHITE}{STRING} {VEHICLE}
-STR_MOST_PROFITABLE_ROADVEHICLE_SCORE         : {SILVER}{CURRENCY_SHORT}{ORANGE}/{YELLOW}{CURRENCY_SHORT}{ORANGE}/{GREEN}{CURRENCY_SHORT} {YELLOW}({COMMA}%) {ORANGE}({COMMA}%)
-STR_MOST_PROFITABLE_ROADVEHICLE_LORRY         : {LORRY}
-STR_MOST_PROFITABLE_ROADVEHICLE_BUS           : {BUS}
-STR_MOST_PROFITABLE_ROADVEHICLE_NONE          :
+STR_MOST_PROFITABLE_ROADVEHICLE_TITLE              :{WHITE}Most Profitable Road Vehicle
+STR_MOST_PROFITABLE_ROADVEHICLE_HEADER             :{ORANGE}Ranks companies based on their road vehicle with the best sum of current and last year profits.
+STR_MOST_PROFITABLE_ROADVEHICLE_FOOTER             :{WHITE}Best road vehicle's name{}{SILVER}Worst profit{ORANGE}/{YELLOW}Average profit{ORANGE}/{GREEN}Best profit{}{YELLOW}Average/Best of this company{}{ORANGE}Best of this company/Best of all companies
+STR_MOST_PROFITABLE_ROADVEHICLE_ELEMENT            :{WHITE}{STRING} {VEHICLE}
+STR_MOST_PROFITABLE_ROADVEHICLE_SCORE              :{SILVER}{CURRENCY_SHORT}{ORANGE}/{YELLOW}{CURRENCY_SHORT}{ORANGE}/{GREEN}{CURRENCY_SHORT} {YELLOW}({COMMA}%) {ORANGE}({COMMA}%)
+STR_MOST_PROFITABLE_ROADVEHICLE_BUS                :{BUS}
+STR_MOST_PROFITABLE_ROADVEHICLE_LORRY              :{LORRY}
+STR_MOST_PROFITABLE_ROADVEHICLE_NONE               :
 
 # most_profitable_ship
-STR_MOST_PROFITABLE_SHIP_TITLE                : {WHITE}Most Profitable Ship
-STR_MOST_PROFITABLE_SHIP_HEADER               : {ORANGE}Ranks companies based on their ship with the best sum of current and last year profits.
-STR_MOST_PROFITABLE_SHIP_FOOTER               : {WHITE}Best ship's name{}{SILVER}Worst profit{ORANGE}/{YELLOW}Average profit{ORANGE}/{GREEN}Best profit{}{YELLOW}Average/Best of this company{}{ORANGE}Best of this company/Best of all companies
-STR_MOST_PROFITABLE_SHIP_ELEMENT              : {WHITE}{SHIP} {VEHICLE}
-STR_MOST_PROFITABLE_SHIP_SCORE                : {SILVER}{CURRENCY_SHORT}{ORANGE}/{YELLOW}{CURRENCY_SHORT}{ORANGE}/{GREEN}{CURRENCY_SHORT} {YELLOW}({COMMA}%) {ORANGE}({COMMA}%)
-STR_MOST_PROFITABLE_SHIP_NONE                 :
+STR_MOST_PROFITABLE_SHIP_TITLE                     :{WHITE}Most Profitable Ship
+STR_MOST_PROFITABLE_SHIP_HEADER                    :{ORANGE}Ranks companies based on their ship with the best sum of current and last year profits.
+STR_MOST_PROFITABLE_SHIP_FOOTER                    :{WHITE}Best ship's name{}{SILVER}Worst profit{ORANGE}/{YELLOW}Average profit{ORANGE}/{GREEN}Best profit{}{YELLOW}Average/Best of this company{}{ORANGE}Best of this company/Best of all companies
+STR_MOST_PROFITABLE_SHIP_ELEMENT                   :{WHITE}{SHIP} {VEHICLE}
+STR_MOST_PROFITABLE_SHIP_SCORE                     :{SILVER}{CURRENCY_SHORT}{ORANGE}/{YELLOW}{CURRENCY_SHORT}{ORANGE}/{GREEN}{CURRENCY_SHORT} {YELLOW}({COMMA}%) {ORANGE}({COMMA}%)
+STR_MOST_PROFITABLE_SHIP_NONE                      :
 
 # most_profitable_aircraft
-STR_MOST_PROFITABLE_AIRCRAFT_TITLE            : {WHITE}Most Profitable Aircraft
-STR_MOST_PROFITABLE_AIRCRAFT_HEADER           : {ORANGE}Ranks companies based on their aircraft with the best sum of current and last year profits.
-STR_MOST_PROFITABLE_AIRCRAFT_FOOTER           : {WHITE}Best aircraft's name{}{SILVER}Worst profit{ORANGE}/{YELLOW}Average profit{ORANGE}/{GREEN}Best profit{}{YELLOW}Average/Best of this company{}{ORANGE}Best of this company/Best of all companies
-STR_MOST_PROFITABLE_AIRCRAFT_ELEMENT          : {WHITE}{PLANE} {VEHICLE}
-STR_MOST_PROFITABLE_AIRCRAFT_SCORE            : {SILVER}{CURRENCY_SHORT}{ORANGE}/{YELLOW}{CURRENCY_SHORT}{ORANGE}/{GREEN}{CURRENCY_SHORT} {YELLOW}({COMMA}%) {ORANGE}({COMMA}%)
-STR_MOST_PROFITABLE_AIRCRAFT_NONE             :
+STR_MOST_PROFITABLE_AIRCRAFT_TITLE                 :{WHITE}Most Profitable Aircraft
+STR_MOST_PROFITABLE_AIRCRAFT_HEADER                :{ORANGE}Ranks companies based on their aircraft with the best sum of current and last year profits.
+STR_MOST_PROFITABLE_AIRCRAFT_FOOTER                :{WHITE}Best aircraft's name{}{SILVER}Worst profit{ORANGE}/{YELLOW}Average profit{ORANGE}/{GREEN}Best profit{}{YELLOW}Average/Best of this company{}{ORANGE}Best of this company/Best of all companies
+STR_MOST_PROFITABLE_AIRCRAFT_ELEMENT               :{WHITE}{PLANE} {VEHICLE}
+STR_MOST_PROFITABLE_AIRCRAFT_SCORE                 :{SILVER}{CURRENCY_SHORT}{ORANGE}/{YELLOW}{CURRENCY_SHORT}{ORANGE}/{GREEN}{CURRENCY_SHORT} {YELLOW}({COMMA}%) {ORANGE}({COMMA}%)
+STR_MOST_PROFITABLE_AIRCRAFT_NONE                  :
+
+# income_table
+STR_INCOME_TABLE_TITLE                             :{WHITE}Income Table
+STR_INCOME_TABLE_HEADER                            :{ORANGE}Ranks companies by their average income over the last 25 quarters.
+STR_INCOME_TABLE_FOOTER                            :{WHITE}Num vehicles per type/Num stations per type{}{SILVER}Worst quarter{ORANGE}/{YELLOW}Best quarter{ORANGE}/{GREEN}Average quarter{}{ORANGE}This company's average/Best average of all companies
+STR_INCOME_TABLE_ELEMENT                           :{WHITE}{STRING2}{STRING2}{STRING2}{STRING2}
+STR_INCOME_TABLE_SCORE                             :{SILVER}{CURRENCY_SHORT}{ORANGE}/{YELLOW}{CURRENCY_SHORT}{ORANGE}/{GREEN}{CURRENCY_SHORT}{ORANGE} ({COMMA}%)
+STR_INCOME_TABLE_TRAIN                             : {TRAIN} {COMMA}/{COMMA}
+STR_INCOME_TABLE_LORRY                             : {LORRY} {COMMA}/{COMMA}
+STR_INCOME_TABLE_SHIP                              : {SHIP} {COMMA}/{COMMA}
+STR_INCOME_TABLE_PLANE                             : {PLANE} {COMMA}/{COMMA}
+STR_INCOME_TABLE_NONE_STRING_STRING                :{STRING}{STRING}
+STR_INCOME_TABLE_NONE                              :
+
+# transport_infrastructure_efficiency
+STR_TRANSPORT_INFRASTRUCTURE_EFFICIENCY_TITLE      :{WHITE}Transport Infrastructure Efficiency
+STR_TRANSPORT_INFRASTRUCTURE_EFFICIENCY_HEADER     :{ORANGE}Ranks companies by profit of vehicles per number of infrastructure pieces.
+STR_TRANSPORT_INFRASTRUCTURE_EFFICIENCY_FOOTER     :{WHITE}Best rated vehicle station's name (rating percent){}{SILVER}Visited vehicle stations{ORANGE}/{YELLOW}Total vehicle stations (Visited percent){}{GREEN}Profit of vehicles per number of infrastructure pieces{}{ORANGE}This company transport efficiency/Best of all companies
+STR_TRANSPORT_INFRASTRUCTURE_EFFICIENCY_ELEMENT    :{WHITE}{STRING}{STRING}{STRING}{STRING}{STRING} {STATION} ({COMMA}%)
+STR_TRANSPORT_INFRASTRUCTURE_EFFICIENCY_SCORE      :{SILVER}{COMMA}{ORANGE}/{YELLOW}{COMMA} ({COMMA}%) {GREEN}{CURRENCY_SHORT}{ORANGE} ({COMMA}%)
+STR_TRANSPORT_INFRASTRUCTURE_EFFICIENCY_TRAIN      :{TRAIN}
+STR_TRANSPORT_INFRASTRUCTURE_EFFICIENCY_BUS        :{BUS}
+STR_TRANSPORT_INFRASTRUCTURE_EFFICIENCY_LORRY      :{LORRY}
+STR_TRANSPORT_INFRASTRUCTURE_EFFICIENCY_SHIP       :{SHIP}
+STR_TRANSPORT_INFRASTRUCTURE_EFFICIENCY_PLANE      :{PLANE}
+STR_TRANSPORT_INFRASTRUCTURE_EFFICIENCY_NONE       :

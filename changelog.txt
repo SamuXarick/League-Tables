@@ -1,5 +1,11 @@
 League Tables
 =============
+v3 (08-03-2025)
+- Added Income Table
+- Added Transport Infrastructure Efficiency
+- Added Asynchronous mode setting
+- Added Update mode setting
+
 v2 (27-03-2024)
 - Fixed a crash that would occur when starting from a scenario
 

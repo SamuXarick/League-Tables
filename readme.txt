@@ -19,7 +19,7 @@ This Game Script replaces the original League Table with a set of custom League 
   Ranks companies by profit of ships per number of canal pieces.
 
 - Airport Infrastructure Efficiency:
-  Airport Infrastructure Efficiency
+  Ranks companies by profit of aircraft per number of airport pieces.
 
 - Most Profitable Train:
   Ranks companies based on their train with the best sum of current and last year profits.
@@ -32,3 +32,9 @@ This Game Script replaces the original League Table with a set of custom League 
 
 - Most Profitable Aircraft:
   Ranks companies based on their aircraft with the best sum of current and last year profits.
+
+- Income Table:
+  Ranks companies by their average income over the last 25 quarters.
+
+- Transport Infrastructure Efficiency:
+  Ranks companies by profit of vehicles per number of infrastructure pieces.

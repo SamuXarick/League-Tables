@@ -1,9 +1,9 @@
-function LeagueTable::GetCompanyValueTable_Val(company)
+function LeagueTables::GetCompanyValueTable_Stats(company)
 {
 	local rating = GSCompany.GetQuarterlyCompanyValue(company, GSCompany.CURRENT_QUARTER);
-	local score = SetText(GetCompanyValueTable_ScoreString(), [ 0, 0, 0 ]);
-	local element = SetText(GetCompanyValueTable_ElementString(), [ company, company ]);
-	local link = [ GSLeagueTable.LINK_COMPANY, company ];
+	local score_text = SetText(GetCompanyValueTable_ScoreString(), [ 0, 0, 0 ]);
+	local element_text = SetText(GetCompanyValueTable_ElementString(), [ company, company ]);
+	local link_info = [ GSLeagueTable.LINK_COMPANY, company ];
 
 	if (GSCompany.ResolveCompanyID(company) != GSCompany.COMPANY_INVALID) {
 		local last_quarter = GSCompany.GetQuarterlyCompanyValue(company, 1);
@@ -12,33 +12,33 @@ function LeagueTable::GetCompanyValueTable_Val(company)
 		local diff_to_last_quarter = rating - last_quarter;
 		local quarter_over_quarter = (last_3_quarters - last_2_quarters) - (last_2_quarters - last_quarter);
 
-		score.p = [ quarter_over_quarter, diff_to_last_quarter, rating ];
+		score_text.params = [ quarter_over_quarter, diff_to_last_quarter, rating ];
 	}
 
-	return [ rating, score, element, link ];
+	return [ rating, score_text, element_text, link_info ];
 }
 
-function LeagueTable::GetCompanyValueTable_ScoreString()
+function LeagueTables::GetCompanyValueTable_ScoreString()
 {
 	return GSText.STR_COMPANY_VALUE_TABLE_SCORE;
 }
 
-function LeagueTable::GetCompanyValueTable_TitleString()
+function LeagueTables::GetCompanyValueTable_TitleString()
 {
 	return GSText.STR_COMPANY_VALUE_TABLE_TITLE;
 }
 
-function LeagueTable::GetCompanyValueTable_HeaderString()
+function LeagueTables::GetCompanyValueTable_HeaderString()
 {
 	return GSText.STR_COMPANY_VALUE_TABLE_HEADER;
 }
 
-function LeagueTable::GetCompanyValueTable_FooterString()
+function LeagueTables::GetCompanyValueTable_FooterString()
 {
 	return GSText.STR_COMPANY_VALUE_TABLE_FOOTER;
 }
 
-function LeagueTable::GetCompanyValueTable_ElementString()
+function LeagueTables::GetCompanyValueTable_ElementString()
 {
 	return GSText.STR_COMPANY_VALUE_TABLE_ELEMENT;
 }
